@@ -11,11 +11,14 @@ Backbone.Gravy = Backbone.View;
 
 _.extend(Backbone.Gravy.prototype, {
     /*
-    *
     * List of reserved words.
-    *
     */
     _r    : ["success", "error", "clear", "submit"],
+
+    /*
+    * Used during form submission validation.
+    */
+    _v    : false,
 
     /*
     *
@@ -25,45 +28,16 @@ _.extend(Backbone.Gravy.prototype, {
     */
     _reserved : function(el) {
         for ( w in this._r ) {
-            if ( el === w )
+            if ( el === this._r[w] )
                 return true;
         }
         return false;
     },
 
-    /*
-    *
-    * Default callback for form focusout events.
-    *
-    * Catches an event and searches the view/model
-    * for the appropriate validation method and callback.
-    *
-    * @param {Event} e
-    */
-    validate: function(e){
-        var callback, node, name, value, gravy, error = null, success = null;
-
-        node  = $(e.target);
-        value = e.target.value;
-        gravy = this.gravy;
-
-        /*
-        *
-        * Invoke 'clear' callback if node value is empty.
-        *
-        */
-        if ( !value.length && gravy.clear )
-            return this[gravy.clear].apply(this, [node]);
-
-        name  = e.target.name;
-
-        /*
-        *
-        * End execution if name is not found in gravy.
-        *
-        */
-        if ( !gravy[name] ) return;
-
+    _validateNode: function(name, val) {
+        var gravy   = this.gravy,
+            success = null,
+            error   = null;
         /*
         *
         * If name points to an object, one or more custom rules for field.
@@ -73,7 +47,7 @@ _.extend(Backbone.Gravy.prototype, {
         */
         if ( !(validator = gravy[name] instanceof Object ? 
                gravy[name] : (this[gravy[name]] || this.model[gravy[name]])) )
-            throw new Error("Unable to find validator for: " + name);
+            throw new Error("[Gravy] Unable to find validator for: " + name);
 
         /*
         *
@@ -86,20 +60,30 @@ _.extend(Backbone.Gravy.prototype, {
             error   = validator.error;
 
             /*
-            * My Eyez!!
+            * The Horror!
+            *
+            * Checks View and Model for validation method.
             */
             if ( !((validator = validator.validator) &&
                    (validator = (this[validator] || this.model[validator]))))
-                throw new Error("Unable to find validator for: " + name);
+                throw new Error("[Gravy] Unable to find validator for: " + name);
         }
 
+        return {
+            result  : validator.apply(this, [val]),
+            success : (success || gravy.success),
+            error   : (error   || gravy.error)
+        };
+    },
+
+    _applyCallback: function(callback, node) {
         /*
         *
         * Validates the value of the input and grabs the appropriate
         * success and error callbacks.
         *
         */
-        callback = this[validator.apply(this, [value]) ? (success || gravy.success) : ( error || gravy.error )];
+        callback = this[callback.result ? callback.success : callback.error];
 
         /*
         *
@@ -107,6 +91,43 @@ _.extend(Backbone.Gravy.prototype, {
         *
         */
         return callback.apply(this, [node]);
+    },
+    /*
+    *
+    * Default callback for form focusout events.
+    *
+    * Catches an event and searches the view/model
+    * for the appropriate validation method and callback.
+    *
+    * @param {Event} e
+    */
+    validate: function(e){
+        var callback, node, name, val, gravy, error = null, success = null;
+
+        node  = $(e.target);
+        val = e.target.value;
+        gravy = this.gravy;
+
+        /*
+        *
+        * Invoke 'clear' callback if node value is empty.
+        *
+        */
+        if ( !this._validating && !val.length && gravy.clear )
+            return this[gravy.clear].apply(this, [node]);
+
+        name  = e.target.name;
+
+        /*
+        *
+        * End execution if name is not found in gravy.
+        *
+        */
+        if ( !gravy[name] ) return;
+
+        callback = this._validateNode(name,val);
+
+        return this._applyCallback(callback, node);
     },
 
     /*
@@ -126,16 +147,56 @@ _.extend(Backbone.Gravy.prototype, {
         e.preventDefault();
 
         var valid = true,
-            gravy = this.gravy;
+            gravy = this.gravy, 
+            submit = gravy.submit, val, validator, node;
+        this._validating = true;
 
+        /*
+        *
+        * Loop through gravy, if not reserved word invoke validation
+        * on that element. Maintain net validation status.
+        *
+        * Apply the appropriate callback.
+        *
+        */
+        for ( field in gravy ) {
+            if ( !this._reserved(field) ) {
+                node = this.$('#'+field);
+                val = node.val();
+                
+                callback = this._validateNode(field, val);
+                
+                if ( !callback.result )
+                    valid = false;
 
-        for ( key in gravy ) {
-            /*
-            * Only act on non-reserved keys.
-            */
-            if ( !this._reserved(key) ) {
-                console.log(key);
+                this._applyCallback(callback, node);
             }
         }
+
+        /*
+        *
+        * If form is not valid and there is no
+        * error callback. Do nothing.
+        *
+        */
+        if ( !valid && !this[submit.error] )
+            return;
+
+        /*
+        *
+        * If form is valid and there is no
+        * success callback. Error.
+        *
+        * TODO: This is subject to change, may have a scenario where
+        * you would want to simply validate the form but not 
+        * do anything.
+        *
+        */
+        if ( valid && !this[submit.success] ) 
+            throw new Error("[Gravy] Unable to find submission success callback!");
+
+        this._validating = false;
+
+        return this[!!valid ? submit.success : submit.error].apply(this, [$(e.target)]);
     }
 });
