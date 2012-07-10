@@ -82,5 +82,3 @@ events : {
 ### Conclusion
 
 I hope this helps. If you have any problems using Gravy please feel free to drop me a line or fix a bug! :D
-
-Cheers.
