@@ -34,6 +34,18 @@ _.extend(Backbone.Gravy.prototype, {
         return false;
     },
 
+    /*
+    *
+    * Validates the value with the appropriate
+    * validation method.
+    *
+    * Returns an object with a summary of the
+    * results.
+    *
+    * @param {String} name
+    * @param {String} val
+    *
+    */
     _validateNode: function(name, val) {
         var gravy   = this.gravy,
             success = null,
@@ -76,6 +88,14 @@ _.extend(Backbone.Gravy.prototype, {
         };
     },
 
+    /*
+    *
+    * Applies the appropriate callback based on validation.
+    *
+    * @param {Object} callback
+    * @param {$} node
+    *
+    */
     _applyCallback: function(callback, node) {
         /*
         *
@@ -92,6 +112,7 @@ _.extend(Backbone.Gravy.prototype, {
         */
         return callback.apply(this, [node]);
     },
+
     /*
     *
     * Default callback for form focusout events.
@@ -113,7 +134,7 @@ _.extend(Backbone.Gravy.prototype, {
         * Invoke 'clear' callback if node value is empty.
         *
         */
-        if ( !this._validating && !val.length && gravy.clear )
+        if ( !this._v && !val.length && gravy.clear )
             return this[gravy.clear].apply(this, [node]);
 
         name  = e.target.name;
@@ -149,7 +170,8 @@ _.extend(Backbone.Gravy.prototype, {
         var valid = true,
             gravy = this.gravy, 
             submit = gravy.submit, val, validator, node;
-        this._validating = true;
+
+        this._v = true;
 
         /*
         *
@@ -195,7 +217,7 @@ _.extend(Backbone.Gravy.prototype, {
         if ( valid && !this[submit.success] ) 
             throw new Error("[Gravy] Unable to find submission success callback!");
 
-        this._validating = false;
+        this._v = false;
 
         return this[!!valid ? submit.success : submit.error].apply(this, [$(e.target)]);
     }
