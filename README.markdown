@@ -16,18 +16,18 @@ Somewhat easily. It really depends on how you plan on implementing form validati
 
 ###### Include it as a dependency..
 ```html
-    <script type="text/javascript" src="PATH_TO_GRAVY"></script>
+<script type="text/javascript" src="PATH_TO_GRAVY"></script>
 ```
 
 ###### Extend Gravy..
 Rather than extending ```Backbone.View``` like so:
 ```javascript
-    var myView = Backbone.View.extend({});
+var myView = Backbone.View.extend({});
 ```
 
 Extend Gravy:
 ```javascript
-    var myView = Backbone.Gravy.extend({});
+var myView = Backbone.Gravy.extend({});
 ```
 
 ###### Set up your gravy train..
