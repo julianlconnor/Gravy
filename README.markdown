@@ -15,7 +15,7 @@ Somewhat easily. It really depends on how you plan on implementing form validati
 ##### How to configure Gravy:
 
 ###### Include it as a dependency..
-After backbone, underscore, and jQuery/Zepto (obvi).
+After ```Backbone```, ```Underscore```, and ```jQuery```/```Zepto```.
 ```html
 <script type="text/javascript" src="PATH_TO_GRAVY"></script>
 ```
