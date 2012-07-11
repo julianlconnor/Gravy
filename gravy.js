@@ -1,15 +1,16 @@
 /*
 *
-* Gravy is a small form validation library.
+*     (c) 2012 Julian Connor
 *
-* Used specifically for Venmo's Backbone Env.
-*
-* By Julian Connor
+*     Gravy may be freely distributed under the MIT license.
 *
 */
 Backbone.Gravy = Backbone.View;
 
 _.extend(Backbone.Gravy.prototype, {
+
+    _VERSION : '1.0',
+
     /*
     * List of reserved words.
     */
