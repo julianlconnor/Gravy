@@ -195,6 +195,8 @@ _.extend(Backbone.Gravy.prototype, {
             }
         }
 
+        this._v = false;
+
         /*
         *
         * If form is not valid and there is no
@@ -216,8 +218,6 @@ _.extend(Backbone.Gravy.prototype, {
         */
         if ( valid && !this[submit.success] ) 
             throw new Error("[Gravy] Unable to find submission success callback!");
-
-        this._v = false;
 
         return this[!!valid ? submit.success : submit.error].apply(this, [$(e.target)]);
     }
