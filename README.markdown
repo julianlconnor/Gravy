@@ -2,7 +2,7 @@
 
 ### What is Gravy?
 
-Gravy is a small form validation layer that helps decouple form events and callbacks from your views and models.
+Gravy is a small (1.2k) form validation layer that helps decouple form events and callbacks from your views and models.
 
 ### Why is this useful?
 
@@ -15,6 +15,7 @@ Somewhat easily. It really depends on how you plan on implementing form validati
 ##### How to configure Gravy:
 
 ###### Include it as a dependency..
+After backbone, underscore, and jQuery/Zepto (obvi).
 ```html
 <script type="text/javascript" src="PATH_TO_GRAVY"></script>
 ```
