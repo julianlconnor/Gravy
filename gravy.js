@@ -49,24 +49,28 @@ _.extend(Backbone.Gravy.prototype, {
     _validateNode: function(name, val) {
         var gravy   = this.gravy,
             success = null,
-            error   = null;
+            error   = null,
+            vKey    = gravy[name];
+
         /*
         *
-        * If name points to an object, one or more custom rules for field.
+        * Throw error if validator is not found.
         *
-        * Otherwise, throw error if validator is not found
+        * Validator can be a String, Function, or Object.
         *
         */
-        if ( !(validator = gravy[name] instanceof Object ? 
-               gravy[name] : (this[gravy[name]] || this.model[gravy[name]])) )
+        if ( !(validator = vKey instanceof Object ?
+               vKey : (this[vKey] || this.model[vKey])) ) 
             throw new Error("[Gravy] Unable to find validator for: " + name);
 
         /*
         *
+        * If name points to an object, one or more custom rules for field.
+        *
         * Check for validation methods in the gravy hash and model
         *
         */
-        if ( _.isObject(validator) && !_.isFunction(validator)) {
+        if ( _.isObject(validator) && !_.isFunction(validator) ) {
 
             success = validator.success;
             error   = validator.error;
@@ -79,7 +83,7 @@ _.extend(Backbone.Gravy.prototype, {
             if ( !((validator = validator.validator) &&
                    (validator = (this[validator] || this.model[validator]))))
                 throw new Error("[Gravy] Unable to find validator for: " + name);
-        }
+        } 
 
         return {
             result  : validator.apply(this, [val]),
@@ -103,7 +107,10 @@ _.extend(Backbone.Gravy.prototype, {
         * success and error callbacks.
         *
         */
-        callback = this[callback.result ? callback.success : callback.error];
+        callback = callback.result ? callback.success : callback.error;
+        if (!_.isFunction(callback)) {
+            callback = this[callback];
+        }
 
         /*
         *
@@ -144,7 +151,10 @@ _.extend(Backbone.Gravy.prototype, {
         * End execution if name is not found in gravy.
         *
         */
-        if ( !gravy[name] ) return;
+        if ( !gravy[name] ) {
+            console.error("[Gravy] Did not find " + name + " in gravy hash");
+            return;
+        }
 
         callback = this._validateNode(name,val);
 
