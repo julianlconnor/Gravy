@@ -39,10 +39,13 @@ gravy : {
     error   : "errorFunction",
     clear   : "clearFunction", // optional
 
-    "attribute" : "validationMethod",
-    "attribute" : {
+    attribute : "validationMethod",
+    attribute : {
         validator : "validationMethod",
         success   : "customSuccessFunction"
+    },
+    attribute : function(value) {
+        // return validation(value);
     }
     ...
 }
@@ -56,7 +59,7 @@ gravy : {
     error   : "error",
     clear   : "clear",
 
-    "username" : "validateUserName"
+    username : "validateUserName"
 }
 ```
 
@@ -64,7 +67,7 @@ This will call the validateUsername function found in *EITHER* your view *OR* yo
 
 Validation methods should return true or false.
 
-In the first gravy example, there is an object linked to the second attribute. In this case, the developer may want to call a custom success function for certain field(s).
+In the first gravy example, there is an object linked to the second attribute. In this case, the developer may want to call a custom success function for certain field(s). You may also tie validation methods directly into your gravy hash.
 
 ###### Pipe events to gravy..
 Lastly, the Gravy API has two methods: ```validate```, and ```validateAll```.
