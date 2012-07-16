@@ -1,5 +1,7 @@
 /*
 *
+*     Gravy is a small form validation callback handler for backbone    .
+*
 *     (c) 2012 Julian Connor
 *
 *     Gravy may be freely distributed under the MIT license.
@@ -12,9 +14,17 @@ _.extend(Backbone.Gravy.prototype, {
     _VERSION : '1.0',
 
     /*
-    * List of reserved words.
+    * Object of reserved words.
+    *
+    * This is an object just incase someone wants
+    * to have custom default callbacks.
     */
-    _r    : ["success", "error", "clear", "submit"],
+    _r    : { 
+        success : "success",
+        error   : "error",
+        clear   : "clear",
+        submit  : "submit"
+    },
 
     /*
     * Used during form submission validation.
@@ -88,8 +98,8 @@ _.extend(Backbone.Gravy.prototype, {
 
         return {
             result  : validator.apply(this, [val]),
-            success : (success || gravy.success),
-            error   : (error   || gravy.error)
+            success : success || gravy.success || this[this._r.success],
+            error   : error   || gravy.error || this[this._r.error]
         };
     },
 
@@ -109,9 +119,7 @@ _.extend(Backbone.Gravy.prototype, {
         *
         */
         callback = callback.result ? callback.success : callback.error;
-        if (!_.isFunction(callback)) {
-            callback = this[callback];
-        }
+        if (!_.isFunction(callback)) callback = this[callback];
 
         /*
         *
@@ -143,7 +151,7 @@ _.extend(Backbone.Gravy.prototype, {
         *
         */
         if ( !this._v && !val.length && gravy.clear )
-            return this[gravy.clear].apply(this, [node]);
+            return this[gravy.clear || this[this._r.clear]].apply(this, [node]);
 
         name  = e.target.name;
 
@@ -152,10 +160,8 @@ _.extend(Backbone.Gravy.prototype, {
         * End execution if name is not found in gravy.
         *
         */
-        if ( !gravy[name] ) {
-            console.error("[Gravy] Did not find " + name + " in gravy hash");
-            return;
-        }
+        if ( !gravy[name] )
+            return console.error("[Gravy] Did not find " + name + " in gravy hash");
 
         callback = this._validateNode(name,val);
 
@@ -214,8 +220,7 @@ _.extend(Backbone.Gravy.prototype, {
         * error callback. Do nothing.
         *
         */
-        if ( !valid && !this[submit.error] )
-            return;
+        if ( !valid && !this[submit.error] ) return;
 
         /*
         *
