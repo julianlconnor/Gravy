@@ -35,9 +35,9 @@ var myView = Backbone.Gravy.extend({});
 Place a gravy object on your view.
 ```javascript
 gravy : {
-    success : "successFunction",
-    error   : "errorFunction",
-    clear   : "clearFunction", // optional
+    success : "successFunction", // defaults to 'success'
+    error   : "errorFunction", // defaults to 'error'
+    clear   : "clearFunction", // optional but defaults to 'clear'
 
     attribute : "validationMethod",
     attribute : {
@@ -51,7 +51,8 @@ gravy : {
 }
 ```
 
-As you can see, in order to use gravy properly you need to set up success and error callbacks along with validation methods for attributes handled in your form.
+As you can see, in order to use gravy properly you need to set up validation methods for attributes handled in your form. Success, error, and clear callbacks default
+to 'success', 'error', and 'clear'.
 For example, I have a form for new users and I want to validate username on focusout:
 ```javascript
 gravy : {
