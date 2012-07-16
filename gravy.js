@@ -1,6 +1,6 @@
 /*
 *
-*     Gravy is a small form validation callback handler for backbone    .
+*     Gravy is a small form validation callback utility for Backbone.
 *
 *     (c) 2012 Julian Connor
 *
@@ -150,8 +150,12 @@ _.extend(Backbone.Gravy.prototype, {
         * Invoke 'clear' callback if node value is empty.
         *
         */
-        if ( !this._v && !val.length && gravy.clear )
-            return this[gravy.clear || this[this._r.clear]].apply(this, [node]);
+        if ( !this._v && !val.length ) {
+            if (!gravy.clear && !this[this._r.clear] )
+                throw new Error("[Gravy] Unable to find clear callback!");
+
+            return this[gravy.clear || this._r.clear].apply(this, [node]);
+        }
 
         name  = e.target.name;
 
