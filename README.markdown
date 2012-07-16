@@ -2,7 +2,7 @@
 
 ### What is Gravy?
 
-Gravy is a small (1.2k) form validation layer that helps decouple form events and callbacks from your views and models.
+Gravy is a small (1.7k) form validation layer that helps decouple form events and callbacks from your views and models.
 
 ### Why is this useful?
 
@@ -56,15 +56,11 @@ to 'success', 'error', and 'clear'.
 For example, I have a form for new users and I want to validate username on focusout:
 ```javascript
 gravy : {
-    success : "success",
-    error   : "error",
-    clear   : "clear",
-
     username : "validateUserName"
 }
 ```
 
-This will call the validateUsername function found in **EITHER** your view **OR** your view's model. On success, the success or error callback will be invoked depending on the results of the validation method.
+This will call the validateUsername function found in **EITHER** your view **OR** your view's model. Based on the structure of the gravy object, the default success or default error callback will be invoked depending on the results of the validation method.
 
 Validation methods should return ```true``` or ```false```.
 
