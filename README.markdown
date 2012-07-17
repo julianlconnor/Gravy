@@ -31,6 +31,18 @@ Extend Gravy:
 var myView = Backbone.Gravy.extend({});
 ```
 
+###### Pipe events to gravy..
+First, the Gravy API has two methods: ```validate```, and ```validateAll```.
+
+```validate``` handles individual form field validation and ```validateAll``` handles form submission validation. In order to use these methods, pipe events into Gravy like so:
+```javascript
+events : {
+    "focusout input" : "validate",
+    "submit"         : "validateAll"
+}
+```
+
+
 ###### Set up your gravy train..
 Place a gravy object on your view.
 ```javascript
@@ -53,29 +65,29 @@ gravy : {
 
 As you can see, in order to use gravy properly you need to set up validation methods for attributes handled in your form. Success, error, and clear callbacks default
 to 'success', 'error', and 'clear'.
-For example, I have a form for new users and I want to validate username on focusout:
+
+For example, I have a form for new users and I want to validate username on focusout as well ass validate the entire form on submit.
 ```javascript
 gravy : {
+    submit   : {
+        success : "save"
+    },
     username : "validateUserName"
 }
 ```
 
-This will call the validateUsername function found in **EITHER** your view **OR** your view's model. Based on the structure of the gravy object, the default success or default error callback will be invoked depending on the results of the validation method.
+This will call the validateUsername function found in **EITHER** your view **OR** your view's model. Based on the structure of the gravy object, the default success or default error callback will be invoked depending on the results of the validation method. When the form is submitted, the entire form will be validated and ( if successful ), an object of the form attributes will be passed to the submit success callback. The attribute object will be formatted as such:
+```javascript
+{
+    username : "John Smith",
+    zipcode : "12345"
+}
+```
 
 Validation methods should return ```true``` or ```false```.
 
 In the first gravy example, there is an object linked to the second attribute. In this case, the developer may want to call a custom success function for certain field(s). You may also tie validation methods directly into your gravy hash.
 
-###### Pipe events to gravy..
-Lastly, the Gravy API has two methods: ```validate```, and ```validateAll```.
-
-```validate``` handles individual form field validation and ```validateAll``` handles form submission validation. In order to use these methods, pipe events into Gravy like so:
-```javascript
-events : {
-    "focusout input" : "validate",
-    "submit"         : "validateAll"
-}
-```
 
 ![Now it's all gravy..](http://dl.dropbox.com/u/1654579/Screenshots/o097.png)
 

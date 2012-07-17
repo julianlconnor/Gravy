@@ -189,9 +189,10 @@ _.extend(Backbone.Gravy.prototype, {
         */
         e.preventDefault();
 
-        var valid = true,
-            gravy = this.gravy, 
-            submit = gravy.submit, val, validator, node;
+        var valid  = true,
+            gravy  = this.gravy, 
+            submit = gravy.submit,
+            attrs  = {}, val, validator, node;
 
         this._v = true;
 
@@ -213,6 +214,7 @@ _.extend(Backbone.Gravy.prototype, {
                 if ( !callback.result )
                     valid = false;
 
+                attrs[field] = val;
                 this._applyCallback(callback, node);
             }
         }
@@ -240,6 +242,7 @@ _.extend(Backbone.Gravy.prototype, {
         if ( valid && !this[submit.success] ) 
             throw new Error("[Gravy] Unable to find submission success callback!");
 
-        return this[!!valid ? submit.success : submit.error].apply(this, [$(e.target)]);
+
+        return this[!!valid ? submit.success : submit.error].apply(this, [attrs, $(e.target)]);
     }
 });
