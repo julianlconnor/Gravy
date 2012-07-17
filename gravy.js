@@ -151,7 +151,8 @@ _.extend(Backbone.Gravy.prototype, {
         *
         */
         if ( !this._v && !val.length ) {
-            if (!gravy.clear && !this[this._r.clear] )
+            // Todo: save gravy clear and check var seperately.
+            if (!this[gravy.clear] && !this[this._r.clear] )
                 throw new Error("[Gravy] Unable to find clear callback!");
 
             return this[gravy.clear || this._r.clear].apply(this, [node]);
