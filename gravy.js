@@ -96,8 +96,19 @@ _.extend(Backbone.Gravy.prototype, {
                 throw new Error("[Gravy] Unable to find validator for: " + name);
         } 
 
+        /*
+        *
+        * Determine context of validator.
+        *
+        * If the validator was found in the view, call it from the view, if it
+        * was found in the model, call it from the model.
+        *
+        * This ensures that model methods invoked within the model, access the
+        * model rather than the view.
+        *
+        */
         return {
-            result  : validator.apply(this, [val]),
+            result  : validator.apply(!!this[vKey] ? this : this.model, [val]),
             success : success || gravy.success || this[this._r.success],
             error   : error   || gravy.error || this[this._r.error]
         };
