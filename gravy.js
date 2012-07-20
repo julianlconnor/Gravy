@@ -177,7 +177,7 @@ _.extend(Backbone.Gravy.prototype, {
         *
         */
         if ( !gravy[name] )
-            return console.error("[Gravy] Did not find " + name + " in gravy hash");
+            return console.log("[Gravy] Did not find " + name + " in gravy hash");
 
         callback = this._validateNode(name,val);
 
