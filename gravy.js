@@ -254,9 +254,9 @@ _.extend(Backbone.Gravy.prototype, {
         *
         */
         if ( !valid &&
-             !( callback = submit.error ) &&
-             !( callback = _.isFunction(callback) ?
-                callback : this[submit.error] ) ) 
+             !((callback = submit.error) &&
+               (callback = _.isFunction(callback) ?
+                callback : this[submit.error])) )
             return;
 
         /*
@@ -270,9 +270,9 @@ _.extend(Backbone.Gravy.prototype, {
         *
         */
         if ( valid &&
-             !( callback = submit.success ) &&
-             !( callback = _.isFunction(callback) ? 
-                callback : this[submit.success] ) )
+             !((callback = submit.success) &&
+               (callback = _.isFunction(callback) ? 
+                callback : this[submit.success])) )
             throw new Error("[Gravy] Unable to find submission success callback!");
 
 
