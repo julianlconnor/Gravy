@@ -91,8 +91,8 @@ _.extend(Backbone.Gravy.prototype, {
             *
             * Checks View and Model for validation method.
             */
-            if ( !(validator = validator.validator) &&
-                 !(validator = this[validator] || this.model[validator]) )
+            if ( !( (validator = validator.validator) &&
+                    (validator = this[validator] || this.model[validator])) )
                 throw new Error("[Gravy] Unable to find validator for: " + name);
         } 
 
