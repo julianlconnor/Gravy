@@ -1,10 +1,10 @@
 /*
 *
-*     Gravy is a small form validation callback utility for Backbone.
+*   Gravy is a small form validation callback utility for Backbone.
 *
-*     (c) 2012 Julian Connor
+*   (c) 2012 Julian Connor
 *
-*     Gravy may be freely distributed under the MIT license.
+*   Gravy may be freely distributed under the MIT license.
 *
 */
 Backbone.Gravy = Backbone.View;
@@ -91,8 +91,8 @@ _.extend(Backbone.Gravy.prototype, {
             *
             * Checks View and Model for validation method.
             */
-            if ( !((validator = validator.validator) &&
-                   (validator = (this[validator] || this.model[validator]))))
+            if ( !(validator = validator.validator) &&
+                 !(validator = this[validator] || this.model[validator]) )
                 throw new Error("[Gravy] Unable to find validator for: " + name);
         } 
 
@@ -130,7 +130,13 @@ _.extend(Backbone.Gravy.prototype, {
         *
         */
         callback = callback.result ? callback.success : callback.error;
-        if (!_.isFunction(callback)) callback = this[callback];
+
+        /*
+        * Throw error if callback is not a function and Gravy was unable to
+        * find callback
+        */
+        if ( !_.isFunction(callback) && !(callback = this[callback]))
+            throw new Error("[Gravy] Unable to find callback: " + callback);
 
         /*
         *
@@ -150,7 +156,7 @@ _.extend(Backbone.Gravy.prototype, {
     * @param {Event} e
     */
     validate: function(e){
-        var callback, node, name, val, gravy, error = null, success = null;
+        var callback, clear, node, name, val, gravy, error = null, success = null;
 
         node  = $(e.target);
         val = e.target.value;
@@ -160,13 +166,22 @@ _.extend(Backbone.Gravy.prototype, {
         *
         * Invoke 'clear' callback if node value is empty.
         *
+        * Some trickery used in finding the clear method.
+        *       
+        * If gravy does not exist in the gravy object and
+        * is not a function, try to find the function in 
+        * the view.
+        *
+        * Throw error if unable to find anything.
+        *
         */
         if ( !this._v && !val.length ) {
-            // Todo: save gravy clear and check var seperately.
-            if (!this[gravy.clear] && !this[this._r.clear] )
+            if ( !(clear = gravy.clear) && 
+                 !(clear = _.isFunction(clear) ?
+                   clear : this[gravy.clear] || this[this._r.clear]) )
                 throw new Error("[Gravy] Unable to find clear callback!");
 
-            return this[gravy.clear || this._r.clear].apply(this, [node]);
+            return clear.apply(this, [node]);
         }
 
         name  = e.target.name;
@@ -203,7 +218,7 @@ _.extend(Backbone.Gravy.prototype, {
         var valid  = true,
             gravy  = this.gravy, 
             submit = gravy.submit,
-            attrs  = {}, val, validator, node;
+            attrs  = {}, callback, val, validator, node;
 
         this._v = true;
 
@@ -238,7 +253,11 @@ _.extend(Backbone.Gravy.prototype, {
         * error callback. Do nothing.
         *
         */
-        if ( !valid && !this[submit.error] ) return;
+        if ( !valid &&
+             !( callback = submit.error ) &&
+             !( callback = _.isFunction(callback) ?
+                callback : this[submit.error] ) ) 
+            return;
 
         /*
         *
@@ -250,10 +269,13 @@ _.extend(Backbone.Gravy.prototype, {
         * do anything.
         *
         */
-        if ( valid && !this[submit.success] ) 
+        if ( valid &&
+             !( callback = submit.success ) &&
+             !( callback = _.isFunction(callback) ? 
+                callback : this[submit.success] ) )
             throw new Error("[Gravy] Unable to find submission success callback!");
 
 
-        return this[!!valid ? submit.success : submit.error].apply(this, [attrs, $(e.target)]);
+        return callback.apply(this, [attrs, $(e.target)]);
     }
 });
