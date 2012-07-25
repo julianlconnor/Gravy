@@ -176,9 +176,8 @@ _.extend(Backbone.Gravy.prototype, {
         *
         */
         if ( !this._v && !val.length ) {
-            if ( !((clear = gravy.clear) && 
-                   (clear = _.isFunction(clear) ?
-                    clear : this[gravy.clear] || this[this._r.clear])) )
+            if ( !(clear = _.isFunction(gravy.clear) ?
+                   gravy.clear : this[gravy.clear] || this[this._r.clear]) )
                 throw new Error("[Gravy] Unable to find clear callback!");
 
             return clear.apply(this, [node]);
