@@ -61,6 +61,7 @@ _.extend(Backbone.Gravy.prototype, {
         var gravy   = this.gravy,
             success = null,
             error   = null,
+            optional = false,
             vKey    = gravy[name];
 
         /*
@@ -83,14 +84,22 @@ _.extend(Backbone.Gravy.prototype, {
         */
         if ( _.isObject(validator) && !_.isFunction(validator) ) {
 
+            /*
+            * If value is optional, return here.
+            */
+            if ( validator.optional )
+                optional = true;
+
+
             success = validator.success;
             error   = validator.error;
             validator = validator.validator;
 
+            /*
+            * If validator is already a method, do nothing.
+            */
             if ( !_.isFunction(validator) ) {
                 /*
-                * The Horror!
-                *
                 * Checks View and Model for validation method.
                 */
                 if ( !( (validator = validator.validator) &&
@@ -111,7 +120,7 @@ _.extend(Backbone.Gravy.prototype, {
         *
         */
         return {
-            result  : validator.apply(!!this[vKey] ? this : this.model, [val]),
+            result  : (!val && optional) || validator.apply(!!this[vKey] ? this : this.model, [val]),
             success : success || gravy.success || this[this._r.success],
             error   : error   || gravy.error || this[this._r.error]
         };
@@ -234,7 +243,7 @@ _.extend(Backbone.Gravy.prototype, {
         */
         for ( field in gravy ) {
             if ( !this._reserved(field) ) {
-                node = this.$('#'+field);
+                node = this.$("[name='" + field + "']");
                 val = node.val();
                 
                 callback = this._validateNode(field, val);

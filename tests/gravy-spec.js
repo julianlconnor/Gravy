@@ -125,6 +125,31 @@ describe("Testing Gravy:", function() {
 
             expect(this.view.error).toHaveBeenCalled();
         });
+        it("Calls anonymous validator function if there's a custom success..", function() {
+            /*
+            * Create faux element.
+            */
+
+            var node = $('<input name="fullname" value="John Smith">');
+            this.view.$el.append(node);
+
+            this.view.gravy.fullname.validator = function(val) {
+                return true;
+            };
+            this.view.gravy.fullname.success = jasmine.createSpy();
+
+            node.focusout();
+
+            expect(this.view.gravy.fullname.success).toHaveBeenCalled();
+
+            this.view.gravy.fullname.validator = function(val) {
+                return false;
+            };
+
+            node.focusout();
+
+            expect(this.view.error).toHaveBeenCalled();
+        });
 
     });
     describe("Testing that custom validation objects are properly used..", function() {
