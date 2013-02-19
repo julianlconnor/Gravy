@@ -133,6 +133,7 @@ describe("Testing Gravy:", function() {
             var node = $('<input name="fullname" value="John Smith">');
             this.view.$el.append(node);
 
+            this.view.gravy.fullname = {};
             this.view.gravy.fullname.validator = function(val) {
                 return true;
             };
