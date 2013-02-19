@@ -85,15 +85,18 @@ _.extend(Backbone.Gravy.prototype, {
 
             success = validator.success;
             error   = validator.error;
+            validator = validator.validator;
 
-            /*
-            * The Horror!
-            *
-            * Checks View and Model for validation method.
-            */
-            if ( !( (validator = validator.validator) &&
-                    (validator = this[validator] || this.model[validator])) )
-                throw new Error("[Gravy] Unable to find validator for: " + name);
+            if ( !_.isFunction(validator) ) {
+                /*
+                * The Horror!
+                *
+                * Checks View and Model for validation method.
+                */
+                if ( !( (validator = validator.validator) &&
+                        (validator = this[validator] || this.model[validator])) )
+                    throw new Error("[Gravy] Unable to find validator for: " + name);
+            }
         } 
 
         /*
