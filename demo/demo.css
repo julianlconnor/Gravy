@@ -1,0 +1,15 @@
+form { padding: 10px; }
+fieldset { border: 0; padding: 0;}
+fieldset div:first-child { margin-top: 0; }
+fieldset div { 
+    border: 1px solid #000;
+    margin: 20px 0;
+    padding: 10px;
+}
+fieldset div label {
+    display: inline-block;
+    width: 100px;
+}
+fieldset div.success { border: 1px solid #0F0; }
+fieldset div.error { border: 1px solid #F00; }
+fieldset div.custom-success { border: 1px dashed #00F; }

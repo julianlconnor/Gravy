@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <title>Gravy Demo</title>
+
+        <!-- include source files here... -->
+        <script type="text/javascript" src="../tests/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="../tests/underscore-min.js"></script>
+        <script type="text/javascript" src="../tests/backbone-min.js"></script>
+        <script type="text/javascript" src="../gravy.js"></script>
+
+        <script type="text/javascript" src="./demo.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="./demo.css">
+
+    </head>
+    <body id="content">
+        <h1>Gravy Demo</h1>
+        <p>Simple demo that shows how useful Gravy is for helping validate forms and route logic.</p>
+        <form>
+            <fieldset>
+                <div>
+                    <label for="username">Username</label>
+                    <input id="username" type="text" name="username" />
+                </div>
+                <div>
+                    <label for="email">Email</label>
+                    <input id="email" type="text" name="email" />
+                </div>
+                <div>
+                    <label for="phone">Phone</label>
+                    <input id="phone" type="text" name="phone" />
+                </div>
+                <div>
+                    <label for="zipcode">Zipcode</label>
+                    <input id="zipcode" type="text" name="zipcode" />
+                </div>
+            </fieldset>
+            <div class="submit-wrapper">
+                <input type="submit" />
+                <div class="status"></div>
+            </div>
+        </form>
+        <script>
+            $(function() {
+                var test = new demo.demoView();
+            });
+        </script>
+    </body>
+</html>
