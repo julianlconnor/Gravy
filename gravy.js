@@ -7,9 +7,8 @@
 *   Gravy may be freely distributed under the MIT license.
 *
 */
-Backbone.Gravy = Backbone.View;
 
-_.extend(Backbone.Gravy.prototype, {
+Backbone.Gravy = Backbone.View.extend({
 
     _VERSION : '1.0',
 

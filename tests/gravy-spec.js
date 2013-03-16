@@ -3,6 +3,10 @@ describe("Testing Gravy:", function() {
         this.view = new gravyTestView();
     });
 
+    it("keeps its prototype isolated from Backbone View's",function() {
+         expect(Backbone.Gravy.prototype).toNotBe(Backbone.View.prototype);
+    });
+
     describe("Asserting that default callbacks are invoked..", function() {
         
         beforeEach(function() {
