@@ -38,7 +38,7 @@ _.extend(Backbone.Gravy.prototype, {
     * @param {String} el
     */
     _reserved : function(el) {
-        for ( w in this._r ) {
+        for (var w in this._r ) {
             if ( el === this._r[w] )
                 return true;
         }
@@ -241,7 +241,7 @@ _.extend(Backbone.Gravy.prototype, {
         * Apply the appropriate callback.
         *
         */
-        for ( field in gravy ) {
+        for (var field in gravy ) {
             if ( !this._reserved(field) ) {
                 node = this.$("[name='" + field + "']");
                 val = node.val();
