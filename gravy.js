@@ -148,10 +148,10 @@ Backbone.Gravy = Backbone.View.extend({
     * Applies the appropriate callback based on validation.
     *
     * @param {Object} callback
-    * @param {$} node
+    * @param {$} element
     *
     */
-    _applyCallback: function(callback, node) {
+    _applyCallback: function(callback, element) {
         /*
         *
         * Validates the value of the input and grabs the appropriate
@@ -169,10 +169,10 @@ Backbone.Gravy = Backbone.View.extend({
 
         /*
         *
-        * Invokes the callback and passes along the input node.
+        * Invokes the callback and passes along the input element.
         *
         */
-        return cb.call(this, node);
+        return cb.call(this, element);
     },
 
     /*
@@ -187,20 +187,20 @@ Backbone.Gravy = Backbone.View.extend({
     validate: function(e){
         var callback,
             clear,
-            node,
+            element,
             name, 
             val,
             gravy,
             error = null,
             success = null;
 
-        node  = $(e.target);
+        element  = $(e.target);
         val = e.target.value;
         gravy = this.gravy;
 
         /*
         *
-        * Invoke 'clear' callback if node value is empty.
+        * Invoke 'clear' callback if element value is empty.
         *
         * Some trickery used in finding the clear method.
         *       
@@ -215,7 +215,7 @@ Backbone.Gravy = Backbone.View.extend({
           clear = _.isFunction(gravy.clear) ? gravy.clear : this[gravy.clear] || this[this._r.clear];
           this._assertCallback("Unable to find clear callback!", clear);
 
-          return clear.call(this, node);
+          return clear.call(this, element);
         }
 
         name  = e.target.name;
@@ -230,7 +230,7 @@ Backbone.Gravy = Backbone.View.extend({
 
         callback = this._validateAttribute(name,val);
 
-        return this._applyCallback(callback, node);
+        return this._applyCallback(callback, element);
     },
 
     /*
@@ -252,7 +252,7 @@ Backbone.Gravy = Backbone.View.extend({
         var valid  = true,
             gravy  = this.gravy, 
             submit = gravy.submit,
-            attrs  = {}, callback, val, validator, node;
+            attrs  = {}, callback, val, validator, element;
 
         this._v = true;
 
@@ -266,8 +266,8 @@ Backbone.Gravy = Backbone.View.extend({
         */
         for (var field in gravy ) {
             if ( !this._reserved(field) ) {
-                node = this.$("[name='" + field + "']");
-                val = node.val();
+                element = this.$("[name='" + field + "']");
+                val = element.val();
                 
                 callback = this._validateAttribute(field, val);
                 
@@ -275,7 +275,7 @@ Backbone.Gravy = Backbone.View.extend({
                     valid = false;
 
                 attrs[field] = val;
-                this._applyCallback(callback, node);
+                this._applyCallback(callback, element);
             }
         }
 
