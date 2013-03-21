@@ -60,6 +60,7 @@ Backbone.Gravy = Backbone.View.extend({
         var gravy   = this.gravy,
             success = null,
             error   = null,
+            validator = null,
             optional = false,
             vKey    = gravy[name];
 
