@@ -120,7 +120,7 @@ Backbone.Gravy = Backbone.View.extend({
         *
         */
         return {
-            result  : (!val && optional) || validator.apply(!!this[vKey] ? this : this.model, [val]),
+            result  : (!val && optional) || validator.call(!!this[vKey] ? this : this.model, val),
             success : success || gravy.success || this[this._r.success],
             error   : error   || gravy.error || this[this._r.error]
         };
@@ -155,7 +155,7 @@ Backbone.Gravy = Backbone.View.extend({
         * Invokes the callback and passes along the input node.
         *
         */
-        return callback.apply(this, [node]);
+        return callback.call(this, node);
     },
 
     /*
@@ -192,7 +192,7 @@ Backbone.Gravy = Backbone.View.extend({
                    gravy.clear : this[gravy.clear] || this[this._r.clear]) )
                 throw new Error("[Gravy] Unable to find clear callback!");
 
-            return clear.apply(this, [node]);
+            return clear.call(this, node);
         }
 
         name  = e.target.name;
@@ -287,6 +287,6 @@ Backbone.Gravy = Backbone.View.extend({
             throw new Error("[Gravy] Unable to find submission success callback!");
 
 
-        return callback.apply(this, [attrs, $(e.target)]);
+        return callback.call(this, attrs, $(e.target));
     }
 });
