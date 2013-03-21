@@ -45,6 +45,24 @@ Backbone.Gravy = Backbone.View.extend({
     },
 
     /*
+    * Asserts whether the callback exists on an object.
+    * Raises an error if not found.
+    *
+    * Name is the name of the callback we were trying to find.
+    *
+    * @param {String} errMsg
+    * @param {Function} callback
+    * @param {String} name
+    *
+    * *args, accepts an arbitrary number of additional arguments that simply
+    * get passed to Error.
+    */
+    _assertCallback: function (errMsg, callback) {
+      if ( !callback )
+        throw new Error.apply(this, ["[GRAVY] " + errMsg].concat(arguments.slice(2)));
+    },
+
+    /*
     *
     * Validates the value with the appropriate
     * validation method.
@@ -71,9 +89,8 @@ Backbone.Gravy = Backbone.View.extend({
         * Validator can be a String, Function, or Object.
         *
         */
-        if ( !(validator = vKey instanceof Object ?
-               vKey : (this[vKey] || this.model[vKey])) ) 
-            throw new Error("[Gravy] Unable to find validator for: " + name);
+        validator = vKey instanceof Object ? vKey : (this[vKey] || this.model[vKey]);
+        this._assertCallback("Unable to find validator for: ", validator, name);
 
         /*
         *
@@ -141,21 +158,21 @@ Backbone.Gravy = Backbone.View.extend({
         * success and error callbacks.
         *
         */
-        callback = callback.result ? callback.success : callback.error;
+        var cb = callback.result ? callback.success : callback.error;
 
         /*
         * Throw error if callback is not a function and Gravy was unable to
         * find callback
         */
-        if ( !_.isFunction(callback) && !(callback = this[callback]))
-            throw new Error("[Gravy] Unable to find callback: " + callback);
+        cb = !_.isFunction(cb) ? cb : this[cb];
+        this._assertCallback("Unable to find callback: ", cb, callback);
 
         /*
         *
         * Invokes the callback and passes along the input node.
         *
         */
-        return callback.call(this, node);
+        return cb.call(this, node);
     },
 
     /*
@@ -168,7 +185,14 @@ Backbone.Gravy = Backbone.View.extend({
     * @param {Event} e
     */
     validate: function(e){
-        var callback, clear, node, name, val, gravy, error = null, success = null;
+        var callback,
+            clear,
+            node,
+            name, 
+            val,
+            gravy,
+            error = null,
+            success = null;
 
         node  = $(e.target);
         val = e.target.value;
@@ -188,11 +212,10 @@ Backbone.Gravy = Backbone.View.extend({
         *
         */
         if ( !this._v && !val.length ) {
-            if ( !(clear = _.isFunction(gravy.clear) ?
-                   gravy.clear : this[gravy.clear] || this[this._r.clear]) )
-                throw new Error("[Gravy] Unable to find clear callback!");
+          clear = _.isFunction(gravy.clear) ? gravy.clear : this[gravy.clear] || this[this._r.clear];
+          this._assertCallback("Unable to find clear callback!", clear);
 
-            return clear.call(this, node);
+          return clear.call(this, node);
         }
 
         name  = e.target.name;
