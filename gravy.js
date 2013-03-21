@@ -287,11 +287,10 @@ Backbone.Gravy = Backbone.View.extend({
         * error callback. Do nothing.
         *
         */
-        if ( !valid &&
-             !((callback = submit.error) &&
-               (callback = _.isFunction(callback) ?
-                callback : this[submit.error])) )
-            return;
+        if ( !valid ) {
+          callback = _.isFunction(submit.error) ? submit.error : this[submit.error];
+          if ( !callback ) return;
+        }
 
         /*
         *
@@ -303,11 +302,10 @@ Backbone.Gravy = Backbone.View.extend({
         * do anything.
         *
         */
-        if ( valid &&
-             !((callback = submit.success) &&
-               (callback = _.isFunction(callback) ? 
-                callback : this[submit.success])) )
-            throw new Error("[Gravy] Unable to find submission success callback!");
+        if ( valid ) {
+          callback = _.isFunction(submit.success) ? submit.success : this[submit.success];
+          this._assertCallback("Unable to find submission success callback!", callback);
+        }
 
 
         return callback.call(this, attrs, $(e.target));
