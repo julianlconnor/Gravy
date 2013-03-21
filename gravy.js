@@ -18,7 +18,7 @@ Backbone.Gravy = Backbone.View.extend({
     * This is an object just incase someone wants
     * to have custom default callbacks.
     */
-    _r    : { 
+    _reservedNames    : { 
         success : "success",
         error   : "error",
         clear   : "clear",
@@ -37,8 +37,8 @@ Backbone.Gravy = Backbone.View.extend({
     * @param {String} el
     */
     _reserved : function(el) {
-        for (var w in this._r ) {
-            if ( el === this._r[w] )
+        for (var w in this._reservedNames ) {
+            if ( el === this._reservedNames[w] )
                 return true;
         }
         return false;
@@ -138,8 +138,8 @@ Backbone.Gravy = Backbone.View.extend({
         */
         return {
             result  : (!val && optional) || validator.call(!!this[vKey] ? this : this.model, val),
-            success : success || gravy.success || this[this._r.success],
-            error   : error   || gravy.error || this[this._r.error]
+            success : success || gravy.success || this[this._reservedNames.success],
+            error   : error   || gravy.error || this[this._reservedNames.error]
         };
     },
 
@@ -212,7 +212,7 @@ Backbone.Gravy = Backbone.View.extend({
         *
         */
         if ( !this._v && !val.length ) {
-          clear = _.isFunction(gravy.clear) ? gravy.clear : this[gravy.clear] || this[this._r.clear];
+          clear = _.isFunction(gravy.clear) ? gravy.clear : this[gravy.clear] || this[this._reservedNames.clear];
           this._assertCallback("Unable to find clear callback!", clear);
 
           return clear.call(this, element);
