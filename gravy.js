@@ -74,7 +74,7 @@ Backbone.Gravy = Backbone.View.extend({
     * @param {String} val
     *
     */
-    _validateNode: function(name, val) {
+    _validateAttribute: function(name, val) {
         var gravy   = this.gravy,
             success = null,
             error   = null,
@@ -228,7 +228,7 @@ Backbone.Gravy = Backbone.View.extend({
         if ( !gravy[name] )
             return console.log("[Gravy] Did not find " + name + " in gravy hash");
 
-        callback = this._validateNode(name,val);
+        callback = this._validateAttribute(name,val);
 
         return this._applyCallback(callback, node);
     },
@@ -269,7 +269,7 @@ Backbone.Gravy = Backbone.View.extend({
                 node = this.$("[name='" + field + "']");
                 val = node.val();
                 
-                callback = this._validateNode(field, val);
+                callback = this._validateAttribute(field, val);
                 
                 if ( !callback.result )
                     valid = false;
