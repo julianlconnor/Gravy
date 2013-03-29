@@ -52,6 +52,7 @@ gravy : {
     clear   : "clearFunction", // optional but defaults to 'clear'
 
     attribute : "validationMethod",
+    attribute : function(val) { return val === "Gravy"; }, // Can also pass anonymous functions
     attribute : {
         validator : "validationMethod",
         success   : "customSuccessFunction"
