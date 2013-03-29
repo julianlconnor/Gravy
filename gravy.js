@@ -28,7 +28,7 @@ Backbone.Gravy = Backbone.View.extend({
     /*
     * Used during form submission validation.
     */
-    _v    : false,
+    _validatingAll    : false,
 
     /*
     *
@@ -59,7 +59,7 @@ Backbone.Gravy = Backbone.View.extend({
     */
     _assertCallback: function (errMsg, callback) {
       if ( !callback )
-        throw new Error.apply(this, ["[GRAVY] " + errMsg].concat(arguments.slice(2)));
+        throw new Error("[GRAVY] " + errMsg);
     },
 
     /*
@@ -164,7 +164,7 @@ Backbone.Gravy = Backbone.View.extend({
         * Throw error if callback is not a function and Gravy was unable to
         * find callback
         */
-        cb = !_.isFunction(cb) ? cb : this[cb];
+        cb = _.isFunction(cb) ? cb : this[cb];
         this._assertCallback("Unable to find callback: ", cb, callback);
 
         /*
@@ -211,7 +211,7 @@ Backbone.Gravy = Backbone.View.extend({
         * Throw error if unable to find anything.
         *
         */
-        if ( !this._v && !val.length ) {
+        if ( !this._validatingAll && !val.length ) {
           clear = _.isFunction(gravy.clear) ? gravy.clear : this[gravy.clear] || this[this._reservedNames.clear];
           this._assertCallback("Unable to find clear callback!", clear);
 
@@ -254,7 +254,7 @@ Backbone.Gravy = Backbone.View.extend({
             submit = gravy.submit,
             attrs  = {}, callback, val, validator, element;
 
-        this._v = true;
+        this._validatingAll = true;
 
         /*
         *
@@ -279,7 +279,7 @@ Backbone.Gravy = Backbone.View.extend({
             }
         }
 
-        this._v = false;
+        this._validatingAll = false;
 
         /*
         *

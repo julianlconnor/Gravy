@@ -229,7 +229,7 @@ describe("Testing Gravy:", function() {
 
             expect( function() { 
                 _this.view.$el.submit();
-            }).toThrow(new Error("[Gravy] Unable to find submission success callback!"));
+            }).toThrow(new Error("[GRAVY] Unable to find submission success callback!"));
         });
 
         it("Should not call save success if there was an error..", function() {
