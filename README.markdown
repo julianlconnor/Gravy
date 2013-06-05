@@ -1,4 +1,6 @@
-![Gravy](http://i.imgur.com/i9nP8a5.png)
+<p align="center">
+    <img src="http://i.imgur.com/i9nP8a5.png" />
+</p>
 
 ### What is Gravy?
 
