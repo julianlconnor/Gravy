@@ -99,6 +99,8 @@ In the first gravy example, there is an object linked to the second attribute. I
 
 I hope this helps. If you have any problems using Gravy please feel free to drop me a line or fix a bug! :D
 
+Props to [@sabrina](http://twitter.com/sabrina) for the logo!
+
 
 ### License
 
