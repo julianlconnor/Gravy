@@ -1,4 +1,4 @@
-!(Gravy)[http://i.imgur.com/i9nP8a5.png]
+![Gravy](http://i.imgur.com/i9nP8a5.png)
 
 ### What is Gravy?
 
