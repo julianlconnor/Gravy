@@ -8,7 +8,7 @@ Gravy is a small (1.7k) form validation layer that helps decouple form events an
 
 ### Why is this useful?
 
-I found myself rewriting a lot of form validation code throughout all my views so I thought it would be nice to decouple that functionality into a standalone plugin.
+I found myself rewriting a lot of form validation code throughout all my views so I thought it would be nice to decouple that functionality into a standalone plugin. If you're writing a `Backbone` application that will have forms, Gravy provides a process and template for implementing and managing form validation.
 
 ### How do I use this?
 
