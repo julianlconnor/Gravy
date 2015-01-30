@@ -1,0 +1,28 @@
+{
+  "name": "Gravy",
+  "version": "0.0.0",
+  "description": "A small form abstraction layer for backbone.",
+  "main": "gravy.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/muffs/Gravy.git"
+  },
+  "keywords": [
+    "gravy",
+    "muffs",
+    "backbone",
+    "forms",
+    "validation"
+  ],
+  "author": "Julian Connor",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/muffs/Gravy/issues"
+  }
+}
