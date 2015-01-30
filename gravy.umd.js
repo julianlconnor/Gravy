@@ -10,13 +10,13 @@
 
 (function (root, factory) {
     if (typeof define === 'function' && define.amd) {
-        define(['backbone', 'jquery'], factory);
+        define(['backbone', 'underscore', 'jquery'], factory);
     } else if (typeof exports === 'object') {
-        module.exports = factory(require('backbone'), require('jquery'));
+        module.exports = factory(require('backbone'), require('underscore'), require('jquery'));
     } else {
-        root.Backbone = factory(root.Backbone, root.$);
+        root.Backbone = factory(root.Backbone, root._, root.$);
     }
-}(this, function (Backbone, $) {
+}(this, function (Backbone, _, $) {
 
   Backbone.Gravy = Backbone.View.extend({
 
